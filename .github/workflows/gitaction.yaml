@@ -8,3 +8,10 @@ jobs:
         run: pwd
       - name: print the vm name
         run: whoami
+  secondjob:
+    runs-on: ubuntu-latest
+    steps:
+      - name: print the given element
+        run: echo "this is the second job"
+      - name: print the any element
+        run: echo "this is the third job"
