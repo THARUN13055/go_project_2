@@ -1,0 +1,10 @@
+name: Fyfirstjob
+on: workflow_dispatch
+jobs:
+  firstjob:
+    runs-on: ubuntu-latest
+    steps:
+      - name: print the path
+        run: pwd
+      - name: print the vm name
+        run: whoami
