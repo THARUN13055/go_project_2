@@ -1,4 +1,4 @@
-name: Fyfirstjob
+name: Github-action-sample
 on: workflow_dispatch
 jobs:
   firstjob:
@@ -9,6 +9,7 @@ jobs:
       - name: print the vm name
         run: whoami
   secondjob:
+    needs: firstjob
     runs-on: ubuntu-latest
     steps:
       - name: print the given element
