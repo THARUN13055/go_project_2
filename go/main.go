@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	apiPaths = "/apis/v1/books"
+	apiPaths = "/database"
 )
 
 type Book struct {

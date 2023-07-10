@@ -4,8 +4,8 @@ WORKDIR /app
 
 COPY ./go /app
 
-RUN cd ./app && go build -o library
+RUN cd /app && go build -o library
 
-CMD [ "./app/library" ]
+CMD [ "/app/library" ]
 
 EXPOSE 8080

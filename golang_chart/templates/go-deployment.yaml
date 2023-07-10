@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-container
+  namespace: {{ .Values.gonamespace}}
+  labels:
+    {{- toYaml .Values.golabels | indent 4}}
+spec:
+  replicas: 3
+  selector: 
+    matchLabels:
+      {{- toYaml .Values.golabels | indent 6}}
+  template:
+    metadata:
+      labels:
+        {{- .Values.golabels | indent 8}}
+    spec:
+      containers:
+        - name: go-contaienr
+          image: tharun13055/library:latest
+          ports:
+            containerPort: 8080
+            name: go-container
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: go-cm
+                  key: host
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: go-cm
+                  key: dbname
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: rootpassword
+            
+

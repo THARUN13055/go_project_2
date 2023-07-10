@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: go-cm
+  namespace: {{ .values.gonamespace}}
+data:
+  {{- toYaml .Values.cmdata | indent 2}}

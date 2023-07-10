@@ -1,0 +1,14 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: db-storage
+  namespace: {{ .Values.dbnamespace}}
+  labels:
+    {{-toYaml .Values.labels | indent 4}}
+parameters:
+  type: {{ .Values.parameters.type}}
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+mountOptions:
+  - debug
+volumeBindingMode: Immediate
