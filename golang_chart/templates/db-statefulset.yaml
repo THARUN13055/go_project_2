@@ -6,11 +6,10 @@ metadata:
   labels:
     {{- toYaml .Values.labels | nindent 4}}
 spec:
+  serviceName: db-service
   selector:
     matchLabels:
       {{- toYaml .Values.labels | nindent 6}}
-  strategy:
-    type: Recreate
   template:
     metadata:
       labels:

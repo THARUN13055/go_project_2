@@ -4,7 +4,7 @@ metadata:
   name: go-container
   namespace: {{ .Values.gonamespace}}
   labels:
-    {{- toYaml .Values.golabels | indent 4}}
+    {{- toYaml .Values.golabels | nindent 4}}
 spec:
   replicas: 3
   selector: 
@@ -15,7 +15,7 @@ spec:
       labels:
         {{- toYaml .Values.golabels | nindent 8}}
     spec:
-      container:
+      containers:
         - name: go-contaienr
           image: tharun13055/library:latest
           ports:
