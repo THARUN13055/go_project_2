@@ -4,10 +4,10 @@ metadata:
   name: db-service
   namespace: {{ .Values.dbnamespace}}
   labels:
-    {{- toYaml .Values.labels | indent 4}}
+    {{- toYaml .Values.labels | nindent 4}}
 spec:
   selector: 
-    {{- toYaml .Values.dblabels | indent 4}}
+    {{- toYaml .Values.dblabels | nindent 4}}
   clusterIP: None
   ports:
     - port: 3306

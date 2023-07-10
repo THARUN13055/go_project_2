@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.pvcname}}
   namespace: {{ .Values.dbnamespace}}
   labels:
-    {{- toYaml .Values.labels | indent 4}}
+    {{- toYaml .Values.labels | nindent 4}}
 spec:
   resources:
     requests:

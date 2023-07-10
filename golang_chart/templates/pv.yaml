@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  nane: pv
+  name: pv
   namespace: {{ .Values.dbnamespace}}
   labels:
-    {{- toYaml .Values.labels | indent 4}}
+    {{- toYaml .Values.labels | nindent 4}}
 spec:
   storageClassName: {{ .Values.storageclassname}}
   capacity:
@@ -13,3 +13,4 @@ spec:
   accessModes:
     - {{ .Values.accessMode}}
   persistentVolumeReclaimPolicy: Recycle
+  emptyDir: {}

@@ -15,11 +15,12 @@ capacity: 10Gi
 request: 5Gi
 accessMode: ReadWriteOnce
 pvcname: pvc
-
+parameters:
+  type: gp2
 
 # db-statefullset
 
-db-containers:
+dbcontainers:
   name: db-mysql
   image: mysql:5.6
   port: 3306
@@ -30,3 +31,5 @@ db-containers:
 cmdata:
   dbname: library
   host: db-service.database:3306 # servicename.namespace
+
+

@@ -4,12 +4,12 @@ metadata:
   name: go-service
   namespace: {{ .Values.gonamespace}}
   labels:
-    {{- toYaml .Values.golabels | indent 4}}
+    {{- toYaml .Values.golabels | nindent 4}}
 spec:
   selector: 
-    {{- toYaml .Values.golabels | indent 4}}
+    {{- toYaml .Values.golabels | nindent 4}}
   ports:
     - port: 8080
       protocol: TCP
       targetPort: 8080
-type: LoadBalancer
+  type: LoadBalancer

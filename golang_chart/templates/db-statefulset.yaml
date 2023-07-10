@@ -1,38 +1,38 @@
 apiVersion: apps/v1
-kind: StatefullSet
+kind: StatefulSet
 metadata:
   name: mysql-container
   namespace: {{ .Values.dbnamespace}}
   labels:
-    {{- toYaml .Values.labels | indent 4}}
+    {{- toYaml .Values.labels | nindent 4}}
 spec:
   selector:
     matchLabels:
-      {{- toYaml .Values.labels | indent 6}}
+      {{- toYaml .Values.labels | nindent 6}}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        {{- toYaml .Values.labels | indent 8}}
+        {{- toYaml .Values.labels | nindent 8}}
     spec:
       containers:
-        - name: {{ .Values.db-containers.name}}
-          image: {{ .Values.db-containers.image}}
+        - name: {{ .Values.dbcontainers.name}}
+          image: {{ .Values.dbcontainers.image}}
           ports:
-            - containerPort: {{ .values.db-containers.port}}
+            - containerPort: {{ .Values.dbcontainers.port}}
               name: mysql-container
           env:
             - name: MYSQL_ROOT_PASSWORD 
               valueFrom:
-                secretKeyref:
+                secretKeyRef:
                   name: {{ .Values.secretname}}
                   key: rootpassword
           volumeMounts:
             - name: db-pvc
-              path: /var/lib/mysql
+              mountPath: /var/lib/mysql
       volumes:
         - name: db-pvc
-          presistentVolumeClaim:
-            claimName: {{ .values.pvname}}
+          persistentVolumeClaim:
+            claimName: {{ .Values.pvcname}}
 
