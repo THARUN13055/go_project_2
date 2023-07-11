@@ -1,0 +1,31 @@
+version: '3.3'
+services:
+  library:
+    image: tharun13055/library:latest
+    container_name: library
+    ports:
+      - '8080:8080'
+    restart: Always
+    environment:
+      DB_USER: 'root'
+      DB_PASS: 'password'
+      DB_HOST: 'localhost:8080'
+      DB_NAME: 'library'
+    links:
+      - mysqlcontainer
+  db:
+    image: mysql:5.7
+    container_name: mysqlcontainer
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    restart: Always
+    environment:
+      MYSQL_DATABASE: 'library'
+      MYSQL_USER: 'root'
+      MYSQL_ROOT_PASSWORD: 'password'
+    volumes:
+      - mysql-db:/var/lib/mysql
+volumes:
+  mysql-db:
