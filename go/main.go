@@ -80,9 +80,8 @@ func (l library) createBook(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&book)
 
 	db := l.openConnection()
-	defer l.closeConnection(db)
 
-	insertQuery,err := db.Prepare("insert into book values(? ? ? )")
+	insertQuery,err := db.Prepare("insert into book values(?, ?, ?)")
 
 	if err != nil {
 		log.Fatalf("preparing the db qurey %s \n", err.Error())
