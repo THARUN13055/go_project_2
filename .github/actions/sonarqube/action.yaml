@@ -1,8 +1,0 @@
-name: Scanner
-description: This is for scanning the device
-
-runs:
-  using: composite
-  steps:
-    - name: GitCheckout
-      uses: actions/checkout@v3

@@ -6,12 +6,16 @@ jobs:
   Golang_build:
     runs-on: ubuntu-22.04
     steps:
+      - name: GitCheckout
+        uses: actions/checkout@v3
       - name: Build this golang
         uses: ./.github/actions/build
   
   SonarQube:
     runs-on: ubuntu-22.04
     steps:
+      - name: GitCheckout
+        uses: actions/checkout@v3
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
