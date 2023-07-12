@@ -1,3 +1,9 @@
+# sonar cloud
+
+here we use sonar cloud which make ease to config
+
+
+
 # ACR
 
 create azure container registory

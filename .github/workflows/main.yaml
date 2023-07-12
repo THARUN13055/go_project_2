@@ -11,16 +11,16 @@ jobs:
       - name: Build this golang
         uses: ./.github/actions/build
   
-  SonarQube:
-    needs: Golang_build
-    runs-on: ubuntu-22.04
-    steps:
-      - name: GitCheckout
-        uses: actions/checkout@v3
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  # SonarQube:
+  #   needs: Golang_build
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - name: GitCheckout
+  #       uses: actions/checkout@v3
+  #     - name: SonarCloud Scan
+  #       uses: SonarSource/sonarcloud-github-action@master
+  #       env:
+  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   # Docker:
   #   needs: SonarQube
@@ -39,7 +39,7 @@ jobs:
   #       uses: ./.github/actions/docker
       
   ACR:
-    needs: Docker
+    needs: Golang_build
     runs-on: ubuntu-22.04
     env:
       LOGIN-SERVER: tharun
@@ -53,4 +53,4 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
       - name: docker-push-scan
-        uses: ./.github/actions/ack
+        uses: ./.github/actions/acr
