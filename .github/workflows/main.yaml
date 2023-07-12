@@ -1,0 +1,13 @@
+name: Golang CICD with some tools
+
+on: workflow_dispatch
+
+jobs:
+  golang_build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Build this golang
+        uses: actions/checkout@v3
+      - name: list the golang
+        run: ls
+        shell: bash
