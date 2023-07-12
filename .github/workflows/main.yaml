@@ -12,6 +12,7 @@ jobs:
         uses: ./.github/actions/build
   
   SonarQube:
+    needs: Golang_build
     runs-on: ubuntu-22.04
     steps:
       - name: GitCheckout
@@ -20,3 +21,20 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  Docker:
+    needs: SonarQube
+    runs-on: ubuntu-22.04
+    steps:
+      - name: GitCheckout
+        uses: actions/checkout@v3
+      - name: Docker login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        shell: bash
+      - name: docker-push-scan
+        uses: ./.github/actions/docker
+          

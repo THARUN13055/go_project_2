@@ -1,0 +1,31 @@
+name: Docker build 
+description: This is for docker build and push is in main file
+
+runs:
+  using: composite
+  steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: library
+    
+    - name: Docker build
+      run: |
+        docker build -t tharun13055/library:latest .
+        docker build -t tharun13055/library:${{ github.run_number }} .
+      shell: bash
+    
+    - name: Aqua Security Trivy
+      uses: aquasecurity/trivy-action@0.11.2
+      with:
+        image-ref: 'tharun13055/library:latest'
+        format: 'json'
+        exit-code: '0'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+    
+    - name: docker image Push
+      run: |
+        docker push tharun13055/library:latest
+        docker push tharun13055/library:${{ github.run_number }}
+      shell: bash
