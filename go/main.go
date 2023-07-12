@@ -67,10 +67,48 @@ func main() {
 		
 	}
 
+	err := l.initializeDatabase()
+	if err != nil {
+		log.Fatalf("Error initializing the database: %s", err.Error())
+	}
+
 	r := mux.NewRouter()
+    
 	r.HandleFunc(apiPath, l.getBooks).Methods("GET")
 	r.HandleFunc(apiPath, l.createBook).Methods("POST")
 	http.ListenAndServe(":8080", r)
+}
+
+
+
+func (l library) initializeDatabase() error {
+	db := l.openConnection()
+	defer l.closeConnection(db)
+
+	_, err := db.Exec("CREATE DATABASE IF NOT EXISTS library")
+	if err != nil {
+		return fmt.Errorf("error creating the database: %s", err.Error())
+	}
+
+	_, err = db.Exec("USE library")
+	if err != nil {
+		return fmt.Errorf("error selecting the database: %s", err.Error())
+	}
+
+	rows, err := db.Query("SHOW TABLES LIKE 'book'")
+	if err != nil {
+		return fmt.Errorf("error checking if table exists: %s", err.Error())
+	}
+	defer rows.Close()
+
+	if !rows.Next() {
+		_, err = db.Exec("CREATE TABLE book (id VARCHAR(100), name VARCHAR(100), isbn VARCHAR(100))")
+		if err != nil {
+			return fmt.Errorf("error creating table: %s", err.Error())
+		}
+	}
+
+	return nil
 }
 
 // POST method
