@@ -22,20 +22,35 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  Docker:
-    needs: SonarQube
+  # Docker:
+  #   needs: SonarQube
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - name: GitCheckout
+  #       uses: actions/checkout@v3
+  #     - name: Docker login
+  #       env:
+  #         DOCKER_USER: ${{ secrets.DOCKER_USER }}
+  #         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  #       run: |
+  #         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+  #       shell: bash
+  #     - name: docker-push-scan
+  #       uses: ./.github/actions/docker
+      
+  ACR:
+    needs: Docker
     runs-on: ubuntu-22.04
+    env:
+      LOGIN-SERVER: tharun
     steps:
       - name: GitCheckout
         uses: actions/checkout@v3
-      - name: Docker login
-        env:
-          DOCKER_USER: ${{ secrets.DOCKER_USER }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: |
-          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        shell: bash
+      - name: ACR login
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ env.LOGIN-SERVER }}.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
       - name: docker-push-scan
-        uses: ./.github/actions/docker
-      
-          
+        uses: ./.github/actions/ack

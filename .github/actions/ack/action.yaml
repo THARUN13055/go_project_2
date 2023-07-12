@@ -1,0 +1,31 @@
+name: Azure container registory
+description: Here we are using ack for storing image
+
+runs:
+  using: composite
+  steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      with: 
+        name: library
+
+    - name: Docker build
+      run: |
+        docker build -t ${{ env.LOGIN-SERVER }}.azurecr.io/library:latest .
+        docker build -t ${{ env.LOGIN-SERVER }}.azurecr.io/library:${{ github.run_number }} .
+      shell: bash
+
+    - name: Aqua Security Trivy
+      uses: aquasecurity/trivy-action@0.11.2
+      with:
+        image-ref: '${{ env.LOGIN-SERVER }}.azurecr.io/library:latest'
+        format: 'json'
+        exit-code: '0'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+
+    - name: Docker build
+      run: |
+        docker push ${{ env.LOGIN-SERVER }}.azurecr.io/library:latest
+        docker push ${{ env.LOGIN-SERVER }}.azurecr.io/library:${{ github.run_number }}
+      shell: bash
