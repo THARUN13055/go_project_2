@@ -1,0 +1,22 @@
+name: Build the Golang
+description: This is for build the golang
+runs:
+  using: composite
+  steps:
+    - name: Check this golang file
+      uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.20'
+  
+    - name: Build the golang
+      run: cd ./go && go build -o library
+      shell: bash
+    
+    - name: Add in Artifactory
+      uses: actions/upload-artifact@v3
+      with:
+        name: library
+        path: ./go/library
