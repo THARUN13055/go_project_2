@@ -11,14 +11,13 @@ runs:
     
     - name: Docker build
       run: |
-        docker build -t tharun13055/library:latest .
         docker build -t tharun13055/library:${{ github.run_number }} .
       shell: bash
     
     - name: Aqua Security Trivy
       uses: aquasecurity/trivy-action@0.11.2
       with:
-        image-ref: 'tharun13055/library:latest'
+        image-ref: 'tharun13055/library:{{ github.run_number }}'
         format: 'json'
         exit-code: '0'
         ignore-unfixed: true
@@ -26,6 +25,5 @@ runs:
     
     - name: docker image Push
       run: |
-        docker push tharun13055/library:latest
         docker push tharun13055/library:${{ github.run_number }}
       shell: bash

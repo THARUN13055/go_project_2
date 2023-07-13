@@ -32,4 +32,6 @@ cmdata:
   dbname: library
   host: db-service.database:3306 # servicename.namespace
 
+# deployment
 
+goimage: tharun13055/library:latest

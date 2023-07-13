@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: go-contaienr
-          image: tharun13055/library:latest
+          image: {{ .Values.goimage}}
           ports:
            - containerPort: 8080
           env:

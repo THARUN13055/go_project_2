@@ -38,19 +38,48 @@ jobs:
   #     - name: docker-push-scan
   #       uses: ./.github/actions/docker
       
-  ACR:
+  # ACR:
+  #   needs: Golang_build
+  #   runs-on: ubuntu-22.04
+  #   env:
+  #     LOGIN-SERVER: tharun
+  #   steps:
+  #     - name: GitCheckout
+  #       uses: actions/checkout@v3
+  #     - name: ACR login
+  #       uses: azure/docker-login@v1
+  #       with:
+  #         login-server: ${{ env.LOGIN-SERVER }}.azurecr.io
+  #         username: ${{ secrets.ACR_USERNAME }}
+  #         password: ${{ secrets.ACR_PASSWORD }}
+  #     - name: docker-push-scan
+  #       uses: ./.github/actions/acr
+  Nexus:
     needs: Golang_build
     runs-on: ubuntu-22.04
-    env:
-      LOGIN-SERVER: tharun
     steps:
-      - name: GitCheckout
+      - name: git Checkout
         uses: actions/checkout@v3
-      - name: ACR login
-        uses: azure/docker-login@v1
+      - name: git action add
+        uses: ./.github/actions/nexus
+      - name: Nexus Repo Publish
+        uses: sonatype-nexus-community/nexus-repo-github-action@master
         with:
-          login-server: ${{ env.LOGIN-SERVER }}.azurecr.io
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
-      - name: docker-push-scan
-        uses: ./.github/actions/acr
+          serverUrl: ${{ secrets.NEXUS_URL}}
+          username: ${{ secrets.NEXUS_USERNAME }}
+          password: ${{ secrets.NEXUS_PASSWORD }}
+      - name: download Artifactory
+        uses: actions/download-artifact@v3
+        with:
+          name: library
+      - name: Nexus Publish
+        run: |
+          export NEXUS_URL="http://172.190.35.175:8081/repository/Golang/"
+          export NEXUS_USERNAME=${{ secrets.NEXUS_USERNAME }}
+          export NEXUS_PASSWORD=${{ secrets.NEXUS_PASSWORD }}
+
+          curl -v -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" \
+            --upload-file library \
+            "$NEXUS_URL/go/"
+
+
