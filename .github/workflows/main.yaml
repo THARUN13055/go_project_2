@@ -60,8 +60,6 @@ jobs:
     steps:
       - name: git Checkout
         uses: actions/checkout@v3
-      - name: git action add
-        uses: ./.github/actions/nexus
       - name: Nexus Repo Publish
         uses: sonatype-nexus-community/nexus-repo-github-action@master
         with:
