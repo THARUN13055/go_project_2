@@ -1,0 +1,26 @@
+name: Kubernetes deployment
+description: Some of the commands to deploy the kubernetes manifest file
+
+runs:
+  using: composite
+  steps: 
+    - name: Helm chart Change version
+      run: |
+        sed -i "s|image: tharun13055/library:.*|image: tharun13055/library:{{ github.run_number }}|" ./golang_chart/values.yaml
+      shell: bash
+    
+    - name: Helm deploy
+      continue-on-error: true
+      run: |
+        helm install Golang_helm golang_chart
+      shell: bash
+    
+    - name: Helm update
+      run: |
+        helm update Golang_helm golang_chart -i
+        sleep 10
+        kubectl get all --namespace golang
+        kubectl get all --namespace database
+      shell: bash
+      
+
