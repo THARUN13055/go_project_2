@@ -76,7 +76,7 @@ jobs:
           export NEXUS_USERNAME=${{ secrets.NEXUS_USERNAME }}
           export NEXUS_PASSWORD=${{ secrets.NEXUS_PASSWORD }}
 
-          curl -v --user $NEXUS_USERNAME:$NEXUS_PASSWORD \
+          curl -v -u $NEXUS_USERNAME:$NEXUS_PASSWORD \
             --upload-file library \
             "$NEXUS_URL/go/"
 
