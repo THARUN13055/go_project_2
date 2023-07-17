@@ -28,7 +28,7 @@ sed -i "s|image: tharun13055/library:.*|image: tharun13055/library:{{ github.run
 
 
 
-az storage file upload --account-name golangcode --share-name code --source ./file.txt --path add/file.txt
+az storage file upload --account-name golangcode --share-name code --source ./library --path add/.library
 az storage directory create --account-name golangcode --share-name code --name add 
 
 

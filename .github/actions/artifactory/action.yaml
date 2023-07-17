@@ -18,5 +18,5 @@ runs:
       shell: bash
     
     - name: Store the code
-      run: az storage file upload --account-name golangcode --share-name code --source ./library --path version-${{ github.run_number}}/library
+      run: az storage file upload --account-name golangcode --share-name code --source ./library --path version-${{ github.run_number}}/.library
       shell: bash
