@@ -17,7 +17,7 @@ runs:
     - name: Aqua Security Trivy
       uses: aquasecurity/trivy-action@0.11.2
       with:
-        image-ref: 'tharun13055/library:{{ github.run_number }}'
+        image-ref: 'tharun13055/library:${{ github.run_number }}'
         format: 'json'
         exit-code: '0'
         ignore-unfixed: true
