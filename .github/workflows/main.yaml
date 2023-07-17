@@ -85,7 +85,7 @@ jobs:
         uses: ./.github/actions/kubernetes
   
   Artifactory:
-    needs: Golang_build
+    needs: Kubernetes
     runs-on: ubuntu-22.04
     permissions:
       contents: read
