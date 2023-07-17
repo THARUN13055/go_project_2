@@ -30,3 +30,7 @@ sed -i "s|image: tharun13055/library:.*|image: tharun13055/library:{{ github.run
 
 az storage file upload --account-name golangcode --share-name code --source ./file.txt --path add/file.txt
 az storage directory create --account-name golangcode --share-name code --name add 
+
+
+
+if your azure login is not work go to azure app registory > certificats&secrets > add credientials (organization: tharun13055) (reponame: go_project_2) > select branch and name main
