@@ -12,12 +12,12 @@ runs:
     - name: Helm deploy
       continue-on-error: true
       run: |
-        helm install Golang_helm golang_chart
+        helm install golang golang_chart
       shell: bash
     
     - name: Helm update
       run: |
-        helm update Golang_helm golang_chart -i
+        helm update golang golang_chart -i
         sleep 10
         kubectl get all --namespace golang
         kubectl get all --namespace database
