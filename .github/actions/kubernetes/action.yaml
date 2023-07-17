@@ -16,6 +16,7 @@ runs:
       shell: bash
     
     - name: Helm update
+      continue-on-error: true
       run: |
         helm update golang golang_chart -i
         sleep 10
