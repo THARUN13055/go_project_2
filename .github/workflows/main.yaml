@@ -3,13 +3,13 @@ name: Golang CICD
 on: workflow_dispatch
 
 jobs:
-  Golang_build:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: GitCheckout
-        uses: actions/checkout@v3
-      - name: Build this golang
-        uses: ./.github/actions/build
+  # Golang_build:
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - name: GitCheckout
+  #       uses: actions/checkout@v3
+  #     - name: Build this golang
+  #       uses: ./.github/actions/build
   
   # SonarQube:
   #   needs: Golang_build
@@ -103,7 +103,7 @@ jobs:
   #       uses: ./.github/actions/kubernetes
   
   Artifactory:
-    needs: Golang_build
+    # needs: Golang_build
     runs-on: ubuntu-22.04
     permissions:
       contents: read
@@ -120,7 +120,7 @@ jobs:
           tenant-id: ${{ secrets.TF_TENANT_ID }}
           subscription-id: ${{ secrets.TF_SUBSCRIPTION_ID }}
 
-      - name: Push to artifactory
-        uses: ./.github/actions/artifactory
+      # - name: Push to artifactory
+      #   uses: ./.github/actions/artifactory
 
 
