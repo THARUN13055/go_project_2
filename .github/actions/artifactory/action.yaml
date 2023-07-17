@@ -8,11 +8,11 @@ runs:
       uses: actions/download-artifact@v3
       with: 
         name: library
-        
+
     - name: Create Directory
-      run: az storage directory create --account-name golangcode --share-name code --name version:${{ github.run_number}}
+      run: az storage directory create --account-name golangcode --share-name code --name version-${{ github.run_number}}
       shell: bash
     
     - name: Store the code
-      run: az storage file upload --account-name golangcode --share-name code --source ./library --path version:${{ github.run_number}}/library
+      run: az storage file upload --account-name golangcode --share-name code --source ./library --path version-${{ github.run_number}}/library
       shell: bash
