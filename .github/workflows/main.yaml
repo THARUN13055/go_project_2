@@ -11,105 +11,100 @@ jobs:
       - name: Build this golang
         uses: ./.github/actions/build
   
-  # SonarQube:
-  #   needs: Golang_build
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #     - name: GitCheckout
-  #       uses: actions/checkout@v3
-  #     - name: SonarCloud Scan
-  #       uses: SonarSource/sonarcloud-github-action@master
-  #       env:
-  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  SonarQube:
+    needs: Golang_build
+    runs-on: ubuntu-22.04
+    steps:
+      - name: GitCheckout
+        uses: actions/checkout@v3
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  # Docker:
-  #   needs: SonarQube
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #     - name: GitCheckout
-  #       uses: actions/checkout@v3
-  #     - name: Docker login
-  #       env:
-  #         DOCKER_USER: ${{ secrets.DOCKER_USER }}
-  #         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  #       run: |
-  #         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-  #       shell: bash
-  #     - name: docker-push-scan
-  #       uses: ./.github/actions/docker
+  Docker:
+    needs: SonarQube
+    runs-on: ubuntu-22.04
+    steps:
+      - name: GitCheckout
+        uses: actions/checkout@v3
+      - name: Docker login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        shell: bash
+      - name: docker-push-scan
+        uses: ./.github/actions/docker
       
-  # ACR:
-  #   needs: SonarQube
-  #   runs-on: ubuntu-22.04
-  #   env:
-  #     LOGIN-SERVER: tharun
-  #   steps:
-  #     - name: GitCheckout
-  #       uses: actions/checkout@v3
-  #     - name: ACR login
-  #       uses: azure/docker-login@v1
-  #       with:
-  #         login-server: ${{ env.LOGIN-SERVER }}.azurecr.io
-  #         username: ${{ secrets.ACR_USERNAME }}
-  #         password: ${{ secrets.ACR_PASSWORD }}
-  #     - name: docker-push-scan
-  #       uses: ./.github/actions/acr
+  ACR:
+    needs: SonarQube
+    runs-on: ubuntu-22.04
+    env:
+      LOGIN-SERVER: tharun
+    steps:
+      - name: GitCheckout
+        uses: actions/checkout@v3
+      - name: ACR login
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ env.LOGIN-SERVER }}.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+      - name: docker-push-scan
+        uses: ./.github/actions/acr
 
-  # Kubernetes:
-  #   needs: ACR
-  #   runs-on: ubuntu-22.04
-  #   permissions:
-  #     contents: read
-  #     pages: write
-  #     id-token: write
-  #   env:
-  #     CLUSTER_NAME: golang
-  #     RESOURCE_GROUP: kubernetes
-  #   steps:
-  #     - name: GitCheckout
-  #       uses: actions/checkout@v3
+  Kubernetes:
+    needs: ACR
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    env:
+      CLUSTER_NAME: golang
+      RESOURCE_GROUP: kubernetes
+    steps:
+      - name: GitCheckout
+        uses: actions/checkout@v3
 
-  #     - name: Install Helm
-  #       uses: Azure/setup-helm@v3
-
-  #     - name: Azure login
-  #       uses: azure/login@v1
-  #       with:
-  #         client-id: ${{ secrets.TF_CLIENT_ID }}
-  #         tenant-id: ${{ secrets.TF_TENANT_ID }}
-  #         subscription-id: ${{ secrets.TF_SUBSCRIPTION_ID }}
-
-  #     - name: connect to Aks
-  #       run: |
-  #         az account set --subscription ${{ secrets.TF_SUBSCRIPTION_ID }}
-  #         az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP}} --name ${{ env.CLUSTER_NAME }}
-      
-  #     - name: Kubernetes deployment
-  #       uses: ./.github/actions/kubernetes
+      - name: Install Helm
+        uses: Azure/setup-helm@v3
+      - name: Azure login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.TF_CLIENT_ID }}
+          tenant-id: ${{ secrets.TF_TENANT_ID }}
+          subscription-id: ${{ secrets.TF_SUBSCRIPTION_ID }}
+      - name: connect to Aks
+        run: |
+          az account set --subscription ${{ secrets.TF_SUBSCRIPTION_ID }}
+          az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP}} --name ${{ env.CLUSTER_NAME }}
+      - name: Kubernetes deployment
+        uses: ./.github/actions/kubernetes
   
-  # Artifactory:
-  #   needs: Golang_build
-  #   runs-on: ubuntu-22.04
-  #   permissions:
-  #     contents: read
-  #     pages: write
-  #     id-token: write
-  #   steps:
-  #     - name: GitCheckout
-  #       uses: actions/checkout@v3
-
-  #     - name: Azure login
-  #       uses: azure/login@v1
-  #       with:
-  #         client-id: ${{ secrets.TF_CLIENT_ID }}
-  #         tenant-id: ${{ secrets.TF_TENANT_ID }}
-  #         subscription-id: ${{ secrets.TF_SUBSCRIPTION_ID }}
-
-  #     - name: Push to artifactory
-  #       uses: ./.github/actions/artifactory
+  Artifactory:
+    needs: Golang_build
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - name: GitCheckout
+        uses: actions/checkout@v3
+      - name: Azure login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.TF_CLIENT_ID }}
+          tenant-id: ${{ secrets.TF_TENANT_ID }}
+          subscription-id: ${{ secrets.TF_SUBSCRIPTION_ID }}
+      - name: Push to artifactory
+        uses: ./.github/actions/artifactory
 
   slack:
-    needs: Golang_build
+    needs: Artifactory
     runs-on: ubuntu-22.04
     steps:
       - name: slack
