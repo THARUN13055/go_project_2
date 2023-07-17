@@ -54,30 +54,73 @@ jobs:
   #         password: ${{ secrets.ACR_PASSWORD }}
   #     - name: docker-push-scan
   #       uses: ./.github/actions/acr
-  Nexus:
+  # Nexus:
+  #   needs: Golang_build
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - name: git Checkout
+  #       uses: actions/checkout@v3
+  #     - name: download Artifactory
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: library
+  #     - name: Nexus Repo Publish
+  #       uses: sonatype-nexus-community/nexus-repo-github-action@master
+  #       with:
+  #         serverUrl: ${{ secrets.NEXUS_URL}}
+  #         username: ${{ secrets.NEXUS_USERNAME }}
+  #         password: ${{ secrets.NEXUS_PASSWORD }}
+  # Kubernetes:
+  #   needs: ACR
+  #   runs-on: ubuntu-22.04
+  #   permissions:
+  #     contents: read
+  #     pages: write
+  #     id-token: write
+  #   env:
+  #     CLUSTER_NAME: golang
+  #     RESOURCE_GROUP: kubernetes
+  #   steps:
+  #     - name: GitCheckout
+  #       uses: actions/checkout@v3
+
+  #     - name: Install Helm
+  #       uses: Azure/setup-helm@v3
+
+  #     - name: Azure login
+  #       uses: azure/login@v1
+  #       with:
+  #         client-id: ${{ secrets.TF_CLIENT_ID }}
+  #         tenant-id: ${{ secrets.TF_TENANT_ID }}
+  #         subscription-id: ${{ secrets.TF_SUBSCRIPTION_ID }}
+
+  #     - name: connect to Aks
+  #       run: |
+  #         az account set --subscription ${{ secrets.TF_SUBSCRIPTION_ID }}
+  #         az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP}} --name ${{ env.CLUSTER_NAME }}
+      
+  #     - name: Kubernetes deployment
+  #       uses: ./.github/actions/kubernetes
+  
+  Artifactory:
     needs: Golang_build
     runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     steps:
-      - name: git Checkout
+      - name: GitCheckout
         uses: actions/checkout@v3
-      - name: Nexus Repo Publish
-        uses: sonatype-nexus-community/nexus-repo-github-action@master
-        with:
-          serverUrl: ${{ secrets.NEXUS_URL}}
-          username: ${{ secrets.NEXUS_USERNAME }}
-          password: ${{ secrets.NEXUS_PASSWORD }}
-      - name: download Artifactory
-        uses: actions/download-artifact@v3
-        with:
-          name: library
-      - name: Nexus Publish
-        run: |
-          export NEXUS_URL="http://172.190.35.175:8081/repository/Golang/"
-          export NEXUS_USERNAME=${{ secrets.NEXUS_USERNAME }}
-          export NEXUS_PASSWORD=${{ secrets.NEXUS_PASSWORD }}
 
-          curl -v -u $NEXUS_USERNAME:$NEXUS_PASSWORD \
-            --upload-file library \
-            "$NEXUS_URL/go/"
+      - name: Azure login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.TF_CLIENT_ID }}
+          tenant-id: ${{ secrets.TF_TENANT_ID }}
+          subscription-id: ${{ secrets.TF_SUBSCRIPTION_ID }}
+          
+      - name: Push to artifactory
+        uses: ./.github/actions/artifactory
 
 

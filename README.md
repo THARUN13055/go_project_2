@@ -25,3 +25,8 @@ sed -i "s|image: tharun13055/library:.*|image: tharun13055/library:1|" ./golang_
 this is for helm chart 
 
 sed -i "s|image: tharun13055/library:.*|image: tharun13055/library:{{ github.run_number }}|" ./golang_chart/values.yaml
+
+
+
+az storage file upload --account-name golangcode --share-name code --source ./file.txt --path add/file.txt
+az storage directory create --account-name golangcode --share-name code --name add 
