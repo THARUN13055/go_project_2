@@ -119,7 +119,7 @@ jobs:
           client-id: ${{ secrets.TF_CLIENT_ID }}
           tenant-id: ${{ secrets.TF_TENANT_ID }}
           subscription-id: ${{ secrets.TF_SUBSCRIPTION_ID }}
-          
+
       - name: Push to artifactory
         uses: ./.github/actions/artifactory
 
