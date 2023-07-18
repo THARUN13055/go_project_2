@@ -14,4 +14,4 @@ spec:
     - {{ .Values.accessMode}}
   persistentVolumeReclaimPolicy: Recycle
   hostPath:
-    path: "home/new4"
+    path: "/home"
