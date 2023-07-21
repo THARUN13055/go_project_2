@@ -9,7 +9,7 @@
 
 ## CICD tool
 
-### Github Action
+- Github Action
  
 ## Used Tools 
 
@@ -53,14 +53,14 @@
 
 12. If the Pipline is success of failed we need to intimate so we use Stack-Notification.
 
-# For installing tools like Docker,Sonarqube,nexus,Argocd,etc.
+## For installing tools like Docker,Sonarqube,nexus,Argocd,etc.
 
-## For all this Installation Use This 'wget'
+### For all this Installation Use This 'wget'
 
 ```bash
 wget https://raw.githubusercontent.com/THARUN13055/quick_install_linux/main/pacman.py
 ```
-## How its work
+### How its work
 
 ```bash
 wget https://raw.githubusercontent.com/THARUN13055/quick_install_linux/main/pacman.py
@@ -69,7 +69,7 @@ python3 pacman.py list
 
 python3 pacman.py install <listed>
 ```
-## Sample installing of Docker
+### Sample installing of Docker
 
 ```bash
 wget https://raw.githubusercontent.com/THARUN13055/quick_install_linux/main/pacman.py
