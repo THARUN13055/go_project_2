@@ -34,4 +34,4 @@ cmdata:
 
 # deployment
 
-goimage: tharun13055/library:latest
+goimage: tharun13055/library:v1test
