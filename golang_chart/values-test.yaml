@@ -1,0 +1,37 @@
+dbnamespace: database-test
+gonamespace: golang-test
+labels:
+  name: mysql
+golabels:
+  name: go
+# Secrets
+secretname: db-secret
+data:
+  password: a3ViZXJuZXRlcwo=
+
+#Storageclass
+storageclassname: db-storage
+capacity: 10Gi
+request: 5Gi
+accessMode: ReadWriteOnce
+pvcname: pvc
+parameters:
+  type: gp2
+
+# db-statefullset
+
+dbcontainers:
+  name: db-mysql
+  image: mysql:5.6
+  port: 3306
+  
+
+# configmap
+
+cmdata:
+  dbname: library
+  host: db-service.database:3306 # servicename.namespace
+
+# deployment
+
+goimage: tharun13055/library:latest
